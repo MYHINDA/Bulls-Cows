@@ -1,44 +1,57 @@
-# import random
-# from random import randint
+import random 
+  
 
-# BLACK = (0, 0, 0)
-# WHITE = (255, 255, 255)
-# RED = (255, 0, 0)
-# GREEN = (0, 255, 0)
-# BLUE = (0, 0, 255)
-# YELLOW = (255, 255, 0)
-# CYAN = (0, 255, 255)
-# MAGENTA = (255, 0, 255)
+def getDigits(num):
+    return [int(i) for i in str(num)]   
 
-# class game(object):
-#     color_list = [YELLOW, RED, GREEN, MAGENTA, BLUE, WHITE, BLACK, CYAN]
-#     feedback_list = [YELLOW, RED]
-#     def __init__(self, name, level):
-#         self.name = name
-#         self.level = level
+def noDuplicates(num):
+    num_li = getDigits(num)
+    if len(num_li) == len(set(num_li)):
+        return True
+    else:
+        return False
+  
+# secret code  
+def generateNum():
+    while True:
+        num = random.randint(1000,9999)
+        if noDuplicates(num):
+            return num
 
-#     def start(self):
-#         # index
-#     def play():
-#         covered = random.choices(color_list,k=4)
-#         guess = input() #4 colors
-#         guesses = guess.split() #list of 4 colors
-#         feedback = []
-#         for g in guesses:
-            
+def numOfBullsCows(num,guess):
+    bull_cow = [0,0]
+    num_li = getDigits(num)
+    guess_li = getDigits(guess)
+      
+    for i,j in zip(num_li,guess_li):
+        if j in num_li:
+            if j == i:
+                bull_cow[0] += 1
+            else:
+                bull_cow[1] += 1 
+    return bull_cow
 
+# start play   
+num = generateNum()
+tries =int(input('Enter number of tries: '))
 
-
-       
-    
-
-# def flow():
-#     init()# enter your name and choose a level + checking name in table
-#     start(name, level) #starting a game board
-#     play() # moves and feedback + score
-#     finish() # print total score + insert info to table
-
-
-
-
-
+# lower level is to change the condition to while True
+while tries > 0:
+    user_guess = int(input("Enter your guess: "))
+      
+    if not noDuplicates(user_guess):
+        print("Number have repeated digits. Try again.")
+        continue
+    if len(str(user_guess)) != 4:
+        print("Enter 4 digit number only. Try again.")
+        continue
+      
+    bull_cow = numOfBullsCows(num,user_guess)
+    print(f"{bull_cow[0]} bulls, {bull_cow[1]} cows")
+    tries -=1
+      
+    if bull_cow[0] == 4:
+        print("You guessed right!")
+        break
+else:
+    print(f"You ran out of tries. Number was {num}")
