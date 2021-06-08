@@ -1,5 +1,6 @@
-import random 
-  
+import random
+import convertNumAndColor as cnac
+
 
 def getDigits(num):
     return [int(i) for i in str(num)]   
@@ -16,6 +17,8 @@ def generateNum():
     while True:
         num = random.randint(1000,9999)
         if noDuplicates(num):
+            # secret_colors = cnac.convertNumToColor(num)
+            # return secret_colors
             return num
 
 def numOfBullsCows(num,guess):
@@ -37,16 +40,18 @@ tries =int(input('Enter number of tries: '))
 
 # lower level is to change the condition to while True
 while tries > 0:
-    user_guess = int(input("Enter your guess: "))
+    user_guess_color_str = input("Enter your guess: ")
+    user_guess_color = user_guess_color_str.split()
+    user_guess_num = cnac.convertListColorsToNum(user_guess_color)
       
-    if not noDuplicates(user_guess):
-        print("Number have repeated digits. Try again.")
+    if not noDuplicates(user_guess_num):#for higher lever, we let duplicates.
+        print("you have repeated colors. Try again.")
         continue
-    if len(str(user_guess)) != 4:
-        print("Enter 4 digit number only. Try again.")
+    if len(str(user_guess_num)) != 4:
+        print("Enter 4 colors only. Try again.")
         continue
       
-    bull_cow = numOfBullsCows(num,user_guess)
+    bull_cow = numOfBullsCows(num,user_guess_num)
     print(f"{bull_cow[0]} bulls, {bull_cow[1]} cows")
     tries -=1
       
@@ -54,4 +59,5 @@ while tries > 0:
         print("You guessed right!")
         break
 else:
-    print(f"You ran out of tries. Number was {num}")
+    secret_colors = ', '.join(cnac.convertNumToColor(num))
+    print(f"You ran out of tries. colors are {secret_colors}")
